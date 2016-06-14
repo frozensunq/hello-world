@@ -3,6 +3,11 @@ package quickstart;
 /**
  * Created by sunqi on 5/17/16.
  */
+
+import java.io.IOException;
+import java.util.*;
+import java.net.*;
+
 public class HelloWorld {
     public static void main(String[] args) {
         System.out.println("Hello, World!");
@@ -21,8 +26,96 @@ public class HelloWorld {
         splitString("www.runoob.com", "o*");
         splitString("www    run  oob com", " {2,}"); // using space(s) as delimiter.
 
+        hashMapTest();
+
+        getIP("www.runoob.com");
+
+        //scanPort("localhost");
+        getRemoteFileSize();
+
+        scaleExchagne();
     }
 
+    public static void scaleExchagne(){
+        //十进制转为其他进制
+        System.out.println(Integer.toBinaryString(112));
+        System.out.println(Integer.toHexString(112));
+        System.out.println(Integer.toOctalString(112));
+
+        //其他进制转为十进制
+        System.out.println(Integer.parseInt("111101", 2)); //binary
+        System.out.println(Integer.parseInt("27", 8));
+        System.out.println(Integer.parseInt("A2", 16));
+
+    }
+
+    public  static void getRemoteFileSize(){
+        int size = 0;
+        try {
+            URL url = new URL("http://www.w3cschool.cc/wp-content/themes/w3cschool.cc/assets/img/newlogo.png");
+            URLConnection conn = url.openConnection();
+            size = conn.getContentLength();
+            conn.getInputStream().close();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        catch(IOException e){}
+        if(size > 0)
+            System.out.println("Got the file, size is " + size + "bytes");
+        else
+            System.out.println("Failed to get the file");
+
+
+    }
+
+    public static void scanPort(String hostname){
+        Socket skt;
+        System.out.println(hostname);
+        for(int i = 0; i < 1024; i++){
+            try{
+                System.out.println("查看 " + i);
+                skt = new Socket(hostname, i);
+                System.out.println("端口 " + i + " 已经被占用");
+            }
+            catch (UnknownHostException e){
+                System.out.println("Socket Exception occurred " + e);
+                break;
+            }
+            catch (IOException e){
+            }
+        }
+    }
+
+    public static void getIP(String site){
+        InetAddress address = null ;
+        try {
+            address = InetAddress.getByName(site);
+        } catch (UnknownHostException e){ e.printStackTrace(); }
+        System.out.println(address.getHostName() + " is : " + address.getHostAddress());
+
+        try {
+            InetAddress localAddr = InetAddress.getLocalHost();
+            System.out.println("local host name is: " + localAddr.getHostName());
+            System.out.println("local host address is: " + localAddr.getHostAddress());
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void hashMapTest(){
+        HashMap<String, String> hMap = new HashMap<String, String>();
+        hMap.put("2", "2nd");
+        hMap.put("1", "1st");
+        hMap.put("5", "5th");
+        hMap.put("3", "3rd");
+        Collection c = hMap.values();
+        Iterator itr = c.iterator();
+        while(itr.hasNext()){
+            System.out.println("itr is like this: " + itr.toString());
+            System.out.println(itr.next());
+        }
+    }
     public static void splitString(String str, String delimiter){
         String [] tmp1;
         tmp1 = str.split(delimiter);
